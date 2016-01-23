@@ -1,0 +1,15 @@
+The Supermicro IKVM java webstart app requires native shared libraries pointed at traditional distro paths (ie. ~/usr/lib/libstdc++.so.6~).
+
+This is problematic on NixOS since nix stores everything in ~/nix/store~ and you end up with errors like:
+
+#+CAPTION: libiKVM64.so: libstdc++.so.6: cannot open shared object file: No such file or directory
+[[file:www/ikvm-libstdcpp-error.png]]
+
+This script extracts the native shared libraries to a temporary dir, runs patchelf to fix them and then runs a modified jnlp to use the fixed libraries.
+
+Note that I've only tested this on 64bit NixOS with online.net servers.
+
+* Usage
+
+1. download the ~launch.jnlp~ file from the IKVM page
+2. run ~launch-ikvm /path/to/your/launch.jnlp~
